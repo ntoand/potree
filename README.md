@@ -30,13 +30,14 @@ Take a look at the [potree showcase](http://potree.org/wp/demo/) for some live e
 
 ## Compatibility
 
-| Browser              | OS      | Result        |
-| -------------------- |:-------:|:-------------:|
-| Chrome 56            | Win7    | works         |
-| Firefox 51           | Win7    | works         |
-| Internet Explorer 11 | Win7    | not supported |
-| Chrome               | Android | works         |
-| Opera                | Android | not supported |
+| Browser              | OS      | Result        |   |
+| -------------------- |:-------:|:-------------:|:-:|
+| Chrome 64            | Win10   | works         |   |
+| Firefox 58           | Win10   | works         |   |
+| Edge                 | Win10   | not supported |   |
+| Internet Explorer 11 | Win7    | not supported |   |
+| Chrome               | Android | works         | Reduced functionality due to unsupported WebGL extensions |
+| Opera                | Android | works         | Reduced functionality due to unsupported WebGL extensions |
 
 ## Credits
 
