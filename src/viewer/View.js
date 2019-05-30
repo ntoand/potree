@@ -9,8 +9,8 @@ export class View{
 		this._pitch = -Math.PI / 4;
 		this.radius = 1;
 
-		this.maxPitch = Math.PI / 2;
-		this.minPitch = -Math.PI / 2;
+		this.maxPitch = Infinity; //Math.PI / 2;
+		this.minPitch = -Infinity; //-Math.PI / 2;
 
 		this.navigationMode = OrbitControls;
 	}

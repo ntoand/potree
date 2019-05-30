@@ -15,6 +15,7 @@ import {BoxVolume} from "../utils/Volume.js";
 import {Features} from "../Features.js";
 import {Message} from "../utils/Message.js";
 import {Sidebar} from "./sidebar.js";
+import {SidebarPrevis} from "./sidebarPrevis.js";
 
 import {InputHandler} from "../navigation/InputHandler.js";
 import {NavigationCube} from "./NavigationCube.js";
@@ -1017,6 +1018,8 @@ export class Viewer extends EventDispatcher{
 				//initSidebar(this);
 				let sidebar = new Sidebar(this);
 				sidebar.init();
+				let sidebarPrevis = new SidebarPrevis(this);
+				sidebarPrevis.init();
 
 				//if (callback) {
 				//	$(callback);
