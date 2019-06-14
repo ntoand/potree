@@ -1172,6 +1172,7 @@ export class Renderer {
 			//uniform float opacity;
 			shader.setUniform1f("uOpacity", material.opacity);
 
+			shader.setUniform1i('elevationDirection', material.elevationDirection);
 			shader.setUniform2f("elevationRange", material.elevationRange);
 			shader.setUniform2f("intensityRange", material.intensityRange);
 			//uniform float intensityGamma;

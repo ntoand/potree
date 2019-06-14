@@ -716,7 +716,7 @@ export class PointCloudMaterial extends THREE.RawShaderMaterial {
 			});
 		}
 	}
-
+	
 	get heightMin () {
 		return this.uniforms.elevationRange.value[0];
 	}
