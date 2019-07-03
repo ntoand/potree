@@ -113,7 +113,16 @@ export class SidebarPrevis{
             
             $('#status').text("Loaded succesfully!");
             $("#info").show();
-            setTimeout(scope.hideMessage, 3000);
+            if(gHasThumbnail === false) {
+                gHasThumbnail = true;
+                setTimeout(function() {
+                    scope.saveThumbnail();
+                }, 2000);
+            }
+            else {
+                setTimeout(scope.hideMessage, 3000);
+            }
+                
         });
           
           
@@ -131,6 +140,17 @@ export class SidebarPrevis{
                 $("#info").show();
                 setTimeout(scope.hideMessage, 3000);
             }
+        });
+
+        scope.socket.on('savethumbnail', function(data){
+            if(data.status == "error") {
+                $('#status').text("Error! Cannot save thumbnail");    
+            }
+            else {
+                $('#status').text("Success: thumbnail saved!");
+            }
+            $("#info").show();
+            setTimeout(scope.hideMessage, 3000);
         });
     }
 
@@ -183,6 +203,9 @@ export class SidebarPrevis{
             SaveAs: function () {
                 scope.saveSettingsAs();
             },
+            SaveThumbnail: function() {
+                scope.saveThumbnail();
+            },
             PointSize: scope.material.size,
             PointSizing: Object.keys(Potree.PointSizeType)[scope.material.pointSizeType],
             PointShape: Object.keys(Potree.PointShape)[scope.material.shape],
@@ -221,11 +244,12 @@ export class SidebarPrevis{
         
         if(!scope.demo) {
             gui.add(obj, 'Save');
-            gui.add(obj, 'SaveAs').name('Save As');
+            gui.add(obj, 'SaveAs').name('Save as');
+            gui.add(obj, 'SaveThumbnail').name('Save thumbnail');
         }
 
         // Navigation
-        var navigation = gui.add(obj, 'Navigation', scope.navigationList).name('Camera Control').listen();
+        var navigation = gui.add(obj, 'Navigation', scope.navigationList).name('Camera control').listen();
         navigation.onFinishChange(function(value) {
             obj.Navigation = value;
             if(value === 'Orbit control') {
@@ -394,6 +418,17 @@ export class SidebarPrevis{
         scope.saveSettings();
     }
 
+    saveThumbnail() {
+        $('#status').text("Save current scene as tag thumbnail!");
+        $("#info").show();
+        var scope = this;
+        scope.viewer.render();
+        var imgData = scope.viewer.renderer.domElement.toDataURL();
+        scope.resizeImage(imgData, function(resizedImg) {
+			scope.socket.emit('savethumbnail', {type: 'point', tag: gTag, dir: gDir, base64: resizedImg});
+		});
+    }
+
     updateDatDropdown(target, list){   
         let innerHTMLStr = "";
         if(list.constructor.name == 'Array'){
@@ -438,5 +473,34 @@ export class SidebarPrevis{
         //let bMax = box.max.z + 0.2 * bWidth;
     }
 
+    resizeImage(base64Str, callback) {
+        var MAX_WIDTH = 512;
+        var MAX_HEIGHT = 512;
+    
+        var img = new Image();
+        img.src = base64Str;
+        img.onload = function(){
+            var height = img.height;
+            var width = img.width;
+            if (width > height) {
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+            } 
+            else {
+                if (height > MAX_HEIGHT) {
+                    width *= MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                }
+            }
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            callback(canvas.toDataURL());
+        }   
+    }
 
 }
